@@ -1,4 +1,4 @@
-/*question 1 solution*/
+/*question 1 */
 %macro gen (n, start, end);
 data random;
 do i = 1 to &n;
