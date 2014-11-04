@@ -1,5 +1,5 @@
 data original;
-infile 'C:\Users\gu\Downloads\13chil.txt';
+infile 'C:\Users\gz056\Downloads\13chil.txt';
 input word & $200. ;
 if _n_ = 1 then call symputx ('title', word);
 if _n_ = 2 then call symputx ('author', word);	
