@@ -37,19 +37,49 @@ proc import datafile="C:\Users\GU\Downloads\datax.csv" DBMS=CSV
 
 run;
 
+ods path work.template(update) sashelp.tmplmst;
+proc format;
+   value pvalsig low-.05 ="red"
+                 .05-high="black";
+run;
+proc template;
+   edit base.corr.stackedmatrix;
+      column (RowName RowLabel) (Matrix) * (Matrix2) * (Matrix3) * (Matrix4);
+      edit matrix2 ;
+         style={foreground=pvalsig.};
+      end;
+    end;
+run;
+title;
+footnote;
+
+ods noptitle;
 ods trace on;
-proc corr data=forsur outp=cor;
+ods escapechar="^";
+options orientation=portrait nodate nonumber;  
+ods rtf file="spuerbsignificance.rtf" startpage=no style=journal;
+ods path sashelp.tmplmst;
+ods text="^S={font_face=Arial font_size=11pt font_weight=bold outputwidth=100% just=c}Default output"; 
+/* Just show the Pearsoncorr table*/
+ods select pearsoncorr; 
+proc corr data=forsur;
 var _ALL_;
 run;
+ods text="^S={font_face=Arial font_size=11pt font_weight=bold outputwidth=100% just=c}Highlight significant Pvalues at the 95th Percentile"; 
+/* Use the ODS PATH referenced above in order to pick up the changes created by PROC TEMPLATE */
+ods path work.template(update) sashelp.tmplmst;
+ods select pearsoncorr; 
+proc corr data=forsur;
+var _ALL_;
+run;
+ods _all_ close;
 ods trace off;
+  
+/* Delete the edited BASE.CORR.STACKEDMATRIX table so the changes do no persist in later output tables */
+proc template; 
+   delete base.corr.stackedmatrix;
+run;
 
 
-
-
-
-
-data cor;
-set cor;
-if _n_ >= 4;
 
  
