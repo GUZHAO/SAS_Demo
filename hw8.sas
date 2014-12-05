@@ -4,6 +4,7 @@ start q1;
 A1=A-shape(A[:,],nrow(A),ncol(A));
 finish;
 
+
 A={1 2 3,4 5 6,7 8 9};
 run q1;
 print A,A1;
